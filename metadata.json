@@ -1,0 +1,6 @@
+{
+  "name": "PlanFlow 计划大师",
+  "description": "多维计划与日程管理平台，支持计划列表与日历看板无缝切换与双向实时编辑，内部本地持久化存储。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
