@@ -19,7 +19,7 @@ export function loadPlansFromStorage(): PlanItem[] {
     if (Array.isArray(parsed)) {
       // Filter out any lingering mock plan IDs if any
       const cleaned = parsed.filter(
-        (p) => p && typeof p.id === 'string' && !p.id.startsWith('plan-1') && !p.id.startsWith('plan-2') && !p.id.startsWith('plan-3') && !p.id.startsWith('plan-4') && !p.id.startsWith('plan-5') && !p.id.startsWith('plan-6') && !p.id.startsWith('plan-7')
+        (p) => p && typeof p.id === 'string' && !/^plan-[1-7]$/.test(p.id)
       );
       return cleaned;
     }
@@ -143,12 +143,12 @@ export function exportPlansToCSV(plans: PlanItem[]): void {
   };
 
   const headers = ['标题', '执行状态', '优先级', '分类标签', '开始日期', '截止日期', '子任务完成度', '详细描述'];
-  
+
   const rows = plans.map((p) => {
     const subtaskProgress = p.subtasks && p.subtasks.length > 0
       ? `${p.subtasks.filter((s) => s.completed).length}/${p.subtasks.length}`
       : '无';
-    
+
     // Escape double quotes in CSV
     const escapeCsv = (str: string) => `"${(str || '').replace(/"/g, '""')}"`;
 
@@ -201,10 +201,10 @@ export function importPlansFromJSON(file: File): Promise<PlanItem[]> {
           color: p.color || 'indigo',
           subtasks: Array.isArray(p.subtasks)
             ? p.subtasks.map((s: { id?: string; title?: string; completed?: boolean }, sIdx: number) => ({
-                id: s.id || `s-${Date.now()}-${sIdx}`,
-                title: String(s.title || ''),
-                completed: Boolean(s.completed),
-              }))
+              id: s.id || `s-${Date.now()}-${sIdx}`,
+              title: String(s.title || ''),
+              completed: Boolean(s.completed),
+            }))
             : [],
           createdAt: p.createdAt || getTodayDateString(),
           updatedAt: new Date().toISOString(),
